@@ -1,38 +1,36 @@
-/*
-Fil: oevelse.js
-Formål: sådan virker API'en fra OpenWeatherMap
-*/
-
-// Token fra OpenWeatherMap
 const appId = 'e36bf8dad45c50f9ba66b7732b1d6adf';
 
-// Henter vejret via lat/lon for Tivoli Friheden
 fetch("https://api.openweathermap.org/data/2.5/weather?lat=56.1356261242&lon=10.1908409033&appid=" + appId + "&units=metric&lang=da")
-.then(response => {
-    return response.json(); // får data som JSON
-})
+.then(response => response.json())
 .then(data => {
-    console.log(data); // viser data i konsollen
-
-    // Konverter solopgang og solnedgang fra Unix-tid
     let sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString("da-DK");
     let sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString("da-DK");
 
-    // Vejrtype og forslag til aktivitet
     let weather = data.weather[0].main.toLowerCase();
+    let iconCode = data.weather[0].icon; // fx "01d"
     let activitySuggestion = "";
+    let tipIcon = "";
 
     if (weather.includes("rain")) {
         activitySuggestion = "Tag regnjakken på og prøv en indendørs aktivitet i Tivoli Friheden.";
+        tipIcon = "🌧️";
     } else if (weather.includes("clear")) {
         activitySuggestion = "Det er perfekt vejr til en tur i rutsjebanen og en is i solen.";
+        tipIcon = "☀️";
     } else if (weather.includes("cloud")) {
         activitySuggestion = "Mildt vejr – tag en afslappet tur i parken eller prøv pariserhjulet.";
+        tipIcon = "☁️";
+    } else if (weather.includes("snow")) {
+        activitySuggestion = "Klæd dig varmt på – måske er det tid til en kop varm kakao!";
+        tipIcon = "❄️";
+    } else if (weather.includes("thunderstorm")) {
+        activitySuggestion = "Hold dig i tørvejr og oplev indendørs underholdning.";
+        tipIcon = "⛈️";
     } else {
         activitySuggestion = "Tag på eventyr – vejret er ikke en undskyldning.";
+        tipIcon = "🎢";
     }
 
-    // Tilføj farveklasse baseret på temperatur
     let tempClass = '';
     if (data.main.temp > 20) {
         tempClass = 'hot';
@@ -42,11 +40,9 @@ fetch("https://api.openweathermap.org/data/2.5/weather?lat=56.1356261242&lon=10.
         tempClass = 'mild';
     }
 
-    // Tilføj vejr-type som klasse på body (til baggrund)
-    let weatherType = 'weather-' + weather; // fx 'clear' → 'weather-clear'
+    let weatherType = 'weather-' + weather;
     document.body.className = weatherType;
 
-    // Lægger vejrdata ind i #result
     document.getElementById('result').innerHTML = 
         '<section class="weatherInfo">' +
 
@@ -56,7 +52,7 @@ fetch("https://api.openweathermap.org/data/2.5/weather?lat=56.1356261242&lon=10.
             '<p>Føles som: ' + data.main.feels_like + '°C</p>' +
 
             '<figure>' +
-                '<img src="http://openweathermap.org/img/wn/' + data.weather[0].icon + '.png" alt="Vejrsymbol">' +
+                '<img src="http://openweathermap.org/img/wn/' + iconCode + '.png" alt="Vejrsymbol">' +
                 '<figcaption>' + data.weather[0].description + '</figcaption>' +
             '</figure>' +
 
@@ -68,7 +64,7 @@ fetch("https://api.openweathermap.org/data/2.5/weather?lat=56.1356261242&lon=10.
             '<p>Solopgang: ' + sunrise + '</p>' +
             '<p>Solnedgang: ' + sunset + '</p>' +
 
-            '<p><strong>Tip:</strong> ' + activitySuggestion + '</p>' +
+            '<p class="tip ' + weatherType + '"><strong>' + tipIcon + ' Tip:</strong> ' + activitySuggestion + '</p>' +
 
         '</section>';
 })

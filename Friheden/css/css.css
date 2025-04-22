@@ -30,7 +30,7 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Baggrunde ud fra vejrtype */
+/* Baggrunde for vejrtype */
 .weather-clear {
     background: linear-gradient(to bottom, #ffe57f, #ffffff);
 }
@@ -49,4 +49,37 @@ body {
 
 .weather-thunderstorm {
     background: linear-gradient(to bottom, #616161, #9e9e9e);
+}
+
+/* Tip-farver */
+.tip.weather-clear {
+    color: #e67e22;
+}
+
+.tip.weather-rain {
+    color: #4a90e2;
+}
+
+.tip.weather-clouds {
+    color: #666666;
+}
+
+.tip.weather-snow {
+    color: #1e90ff;
+}
+
+.tip.weather-thunderstorm {
+    color: #800080;
+}
+
+.tip {
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 1.1rem;
+}
+
+footer{
+    background: url("../images/ooter.png") no-repeat center center fixed;
+    background-size: cover;
+    z-index: 1;
 }
