@@ -1,6 +1,6 @@
 const appId = 'e36bf8dad45c50f9ba66b7732b1d6adf';
 
-fetch("https://api.openweathermap.org/data/2.5/weather?lat=56.1356261242&lon=10.1908409033&appid=" + appId + "&units=metric&lang=da")
+fetch("https://api.openweathermap.org/data/2.5/weather?q=aarhus&appid=" + appId + "&units=metric&lang=da")
 .then(response => response.json())
 .then(data => {
     let sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString("da-DK");
@@ -8,6 +8,7 @@ fetch("https://api.openweathermap.org/data/2.5/weather?lat=56.1356261242&lon=10.
 
     let weather = data.weather[0].main.toLowerCase();
     let iconCode = data.weather[0].icon; // fx "01d"
+    let customIconPath = './images/${iconcode}.png';
     let activitySuggestion = "";
     let tipIcon = "";
 
@@ -52,7 +53,7 @@ fetch("https://api.openweathermap.org/data/2.5/weather?lat=56.1356261242&lon=10.
             '<p>Føles som: ' + data.main.feels_like + '°C</p>' +
 
             '<figure>' +
-                '<img src="http://openweathermap.org/img/wn/' + iconCode + '.png" alt="Vejrsymbol">' +
+                '<img class="ikoner" src="images/' + data.weather[0].icon + '.png" alt="Vejrsymbol">' +
                 '<figcaption>' + data.weather[0].description + '</figcaption>' +
             '</figure>' +
 
